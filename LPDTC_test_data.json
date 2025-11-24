@@ -1,0 +1,54 @@
+{
+  "BoK_concepts": [
+    {
+      "uri": "",
+      "label": ""
+    },
+    {
+      "uri": "",
+      "label": ""
+    }
+  ],
+  "Learning_Paths": [
+    {
+      "LP_URI": "https://eduflex.nl/data/lp/{GUID}",
+      "LP_label": "LP name",
+      "LP-description": "LP_description",
+      "courses": [
+        {
+          "course_label": "Course1",
+          "course_uri": "https://eduflex.nl/data/courses/{GUID}",
+          "course_description": "this is a course",
+          "course_LOs": [
+            {
+              "LO_URI": "https://eduflex.nl/data/lo/{GUID}",
+              "LO_label": "",
+              "bloom_level": 3,
+              "bloom_level_label": "create",
+              "concepts": [
+                {
+                  "uri": "https://eduflex.nl/data/concept/{GUID}",
+                  "label": "",
+                  "description": ""
+                }
+              ]
+            },
+            {
+              "LO_URI": "https://eduflex.nl/data/lo/{GUID}",
+              "LO_label": "",
+              "bloom_level": 3,
+              "bloom_level_label": "create",
+              "concepts": [
+                {
+                  "uri": "https://eduflex.nl/data/concepts/{GUID}",
+                  "label": "",
+                  "description": ""
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
