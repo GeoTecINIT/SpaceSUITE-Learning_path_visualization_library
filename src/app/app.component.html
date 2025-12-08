@@ -1,0 +1,45 @@
+<div class="p-4 flex flex-col h-full gap-4">
+  <h3>Learning Path Visualization</h3>
+
+  <div class="grid grid-cols-4 gap-4">
+    <div class="relative mb-6">
+      <label for="range-input-width" class="text-gray-600">Card Width</label>
+      <input id="range-input-width" (change)="onChangeWidth($event)" type="range" value="200" min="200" max="500" step="10" class="w-full h-2 bg-neutral-quaternary rounded-full appearance-none cursor-pointer">
+      <span class="text-sm text-body absolute start-0 -bottom-6">200</span>
+      <span class="text-sm text-body absolute end-0 -bottom-6">500</span>
+    </div>
+
+    <div class="relative mb-6">
+      <label for="range-input-height" class="text-gray-600">Card Height</label>
+      <input id="range-input-height" (change)="onChangeHeight($event)" type="range" value="150" min="150" step="10" max="500" class="w-full h-2 bg-neutral-quaternary rounded-full appearance-none cursor-pointer">
+      <span class="text-sm text-body absolute start-0 -bottom-6">150</span>
+      <span class="text-sm text-body absolute end-0 -bottom-6">500</span>
+    </div>
+  </div>
+
+  @for(path of learning_paths; track path){
+    <spacesuite-learning-path
+      [data]="path"
+      [styleConfig]="myStyle()"
+      [activePathId]="activePathId"
+      (clickCourseEvent)="onClickCourse($event)"
+      (changeActivePathEvent)="onActivePathChange($event)"
+      (viewCourseEvent)="onViewCourse($event)"
+    ></spacesuite-learning-path>
+  }
+
+
+
+  <spacesuite-learning-paths
+    [learningPaths]="learning_paths"
+    [styleConfig]="myStyle()"
+    (clickCourseEvent)="onClickCourse($event)"
+    (viewCourseEvent)="onViewCourse($event)"
+  ></spacesuite-learning-paths>
+
+  <lib-course-component
+    [course]="selectedCourse"
+    (close)="onClose($event)"
+  ></lib-course-component>
+
+</div>

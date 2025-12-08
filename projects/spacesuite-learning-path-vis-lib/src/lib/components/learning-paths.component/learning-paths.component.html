@@ -1,0 +1,131 @@
+<div class="w-full space-y-10 shadow-md rounded border-box p-4 border-2 border-gray-200">
+
+  <!-- Iterate multiple learning paths -->
+  @for(path of learningPaths; track path){
+    <div
+      id="path-{{path.id}}"
+     class="p-2 rounded w-full box-border shadow-sm"
+      [ngStyle]="{
+        'color': styleConfig.textColor,
+        'background-color': styleConfig.backgroundColor,
+      }"
+      [class.border-gray-400]="selectedPath?.id === path.id"
+      [class.border-3]="selectedPath?.id === path.id"
+      (click)="selectedPath = path; selectedCard = null">
+
+      <!-- Path Header -->
+      <h2 class="text-xl font-semibold mb-4 text-gray-700 cursor-pointer">
+        {{ path.label }}
+      </h2>
+
+      <!-- Outer pan + zoom container -->
+      <div
+        class="container relative w-full overflow-hidden rounded"
+        (wheel)="onWheel($event, path)"
+        (pointerdown)="onPointerDown($event, path)"
+        (pointermove)="onPointerMove($event, path)"
+        (pointerup)="onPointerUp($event, path)"
+        (pointerleave)="onPointerUp($event, path)"
+      >
+        <!-- Zoom + translate transform -->
+        <div
+          class="transform-gpu origin-center inset-0"
+          [style.transform]="
+            'translate(' + path.translateX + 'px, ' + path.translateY +
+            'px) scale(' + path.scale + ')'
+          "
+
+        >
+          <!-- Rotation for mobile -->
+          <div class="relative md:rotate-0 origin-top-left" [ngStyle]="{
+            'height': `${styleConfig.cardHeight * 1.5}px`,
+            'min-height': '200px'
+          }">
+            <svg
+              [attr.width]="'100%'" [attr.height]="'100%'"
+              preserveAspectRatio="none">
+
+              <!-- Arrowhead -->
+              <defs>
+                <marker id="arrowhead" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto" class="text-gray-400">
+                  <path d="M0,0 L8,4 L0,8 L2,4 z" fill="currentColor"></path>
+                </marker>
+              </defs>
+
+              <g class="stroke-gray-400" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                @for(link of path.links; track link){
+                  <ng-container>
+                    <path
+                      [attr.d]="arrowPath(link.from, link.to)"
+                      marker-end="url(#arrowhead)"
+                    ></path>
+                  </ng-container>
+                }
+              </g>
+
+              <!-- Node cards -->
+              @for (node of path.courses; track node){
+                <foreignObject  [attr.x]="node.x" [attr.y]="node.y" height="100%"
+                  [attr.width]="styleConfig.cardWidth"
+                  class="absolute mx-auto md:mx-0 z-30"
+                >
+                  <div
+                    class="card p-4 rounded-lg mb-4 bg-white/70 shadow transform transition border-2 border-gray-300 cursor-pointer hover:border-green-700"
+                    #cardEl
+                    [attr.data-id]="node.id"
+                    [ngClass]="{
+                      'shadow-lg border-green-700 border-3':
+                        selectedCard?.pathId === path.id && selectedCard?.nodeId === node.id
+                    }"
+                    [ngStyle]="{
+                      'height': `${styleConfig.cardHeight * 1.3}px`
+                    }"
+                    (click)="onCardClick(node, path, $event)"
+                  >
+                    <div class="grid grid-cols-6 gap-1">
+                      <svg class="col-start-1 w-6 h-6 text-green-700 cursor-pointer"
+                        (mouseover)="onCourseHover(path, node, $event)"
+                        (mouseout)="onCourseHoverOut(path, node, $event)"
+                        aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 11h2v5m-2 0h4m-2.592-8.5h.01M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
+                      </svg>
+                      <h3 class="col-start-2 col-span-5 col-end-12font-semibold truncate text-base/5 font-semibold">{{ node.label }}</h3>
+                    </div>
+
+                    <p class="text-sm wrap-break-word line-clamp-2 prose max-w-none">{{ node.description }}</p>
+                    <p class="text-sm text-gray-400 my-4">
+                      {{node?.learning_objectives?.length}} Learning objectives and {{getConcepts(node).length}} Concepts
+                    </p>
+
+
+                    <button
+                      class="mt-4 px-3 py-1 rounded text-white text-sm bg-green-900 hover:bg-green-700 cursor-pointer"
+                      [ngClass]="{
+                        'block': selectedCard?.nodeId === node.id && selectedCard?.pathId === path.id,
+                        'hidden': selectedCard?.nodeId !== node.id || selectedCard?.pathId !== path.id,
+                      }"
+                      (click)="onViewCourse(node, $event)">
+                      View Course
+                    </button>
+                  </div>
+                </foreignObject>
+              }
+            </svg>
+          </div>
+        </div>
+
+        <!-- Tooltip per path -->
+        @if (activeTooltip?.pathId === path.id) {
+          <div
+            class="pointer-events-none fixed px-2 py-1 bg-gray-800 text-white text-xs rounded shadow-lg z-50"
+            [style.left.px]="activeTooltip?.x"
+            [style.top.px]="activeTooltip?.y"
+          >
+            {{ activeTooltip?.text  }}
+          </div>
+        }
+      </div>
+
+    </div>
+  }
+</div>

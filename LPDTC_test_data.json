@@ -11,18 +11,18 @@
   ],
   "Learning_Paths": [
     {
-      "LP_URI": "https://eduflex.nl/data/lp/{GUID}",
-      "LP_label": "LP name",
-      "LP-description": "LP_description",
+      "uri": "https://eduflex.nl/data/lp/{GUID}",
+      "label": "LP name",
+      "description": "LP_description",
       "courses": [
         {
-          "course_label": "Course1",
-          "course_uri": "https://eduflex.nl/data/courses/{GUID}",
-          "course_description": "this is a course",
-          "course_LOs": [
+          "label": "Course1",
+          "uri": "https://eduflex.nl/data/courses/{GUID}",
+          "description": "this is a course",
+          "learning_objectives": [
             {
-              "LO_URI": "https://eduflex.nl/data/lo/{GUID}",
-              "LO_label": "",
+              "uri": "https://eduflex.nl/data/lo/{GUID}",
+              "label": "",
               "bloom_level": 3,
               "bloom_level_label": "create",
               "concepts": [
@@ -34,8 +34,8 @@
               ]
             },
             {
-              "LO_URI": "https://eduflex.nl/data/lo/{GUID}",
-              "LO_label": "",
+              "uri": "https://eduflex.nl/data/lo/{GUID}",
+              "label": "",
               "bloom_level": 3,
               "bloom_level_label": "create",
               "concepts": [

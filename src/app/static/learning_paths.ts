@@ -1,55 +1,6 @@
-{
-  "BoK_concepts": [
-    {
-      "uri": "https://geospacebok.eu/TA12-1",
-      "label": "[TA12-1] EO for climate change mitigation & adaptation"
-    },
-    {
-      "uri": "https://geospacebok.eu/TA13-1",
-      "label": "[TA13-1] Monitor the atmosphere and climate"
-    },
-    {
-      "uri": "https://geospacebok.eu/TA13-1-2",
-      "label": "[TA13-1-2] Monitor the climate"
-    },
-    {
-      "uri": "https://geospacebok.eu/TA13-1-1",
-      "label": "[TA13-1-1] Monitor the atmosphere"
-    },
-    {
-      "uri": "https://geospacebok.eu/PP1-6-12",
-      "label": "[PP1-6-12] The Carbon Cycle, Greenhouse Effect"
-    },
-    {
-      "uri": "https://geospacebok.eu/PP1-6-1",
-      "label": "[PP1-6-1] Structure and chemical-physical composition of Earth's atmosphere"
-    },
-    {
-      "uri": "https://geospacebok.eu/PP1-6-5",
-      "label": "[PP1-6-5] Thermal infrared radiation transfer in the atmosphere"
-    },
-    {
-      "uri": "https://geospacebok.eu/IP3-4",
-      "label": "[IP3-4] Image classification"
-    },
-    {
-      "uri": "https://geospacebok.eu/PP2-2-5-3",
-      "label": "[PP2-2-5-3] Soil permittivity"
-    },
-    {
-      "uri": "https://geospacebok.eu/TA13-4-6",
-      "label": "[TA13-4-6] Monitor land use"
-    },
-    {
-      "uri": "https://geospacebok.eu/DM3-2",
-      "label": "[DM3-2] The raster model"
-    },
-    {
-      "uri": "https://geospacebok.eu/PS2-3-2",
-      "label": "[PS2-3-2] Terrestrial Laser Scanning"
-    }
-  ],
-  "Learning_Paths": [
+import { LearningPath } from "../../../dist/spacesuite-learning-path-vis-lib";
+
+export const LEARNING_PATHS: LearningPath[] = [
     {
       "uri": "https://eduflex.nl/data/lp/4b4034a0-b7fc-48fe-b9db-e0abd5dde293",
       "label": "Land-use image classification for greenhouse gases",
@@ -106,6 +57,45 @@
           ]
         }
       ]
+    },
+    {
+      "uri": "https://eduflex.nl/data/lp/{GUID}",
+      "label": "LP name",
+      "description": "LP_description",
+      "courses": [
+        {
+          "label": "Course1",
+          "uri": "https://eduflex.nl/data/courses/{GUID}",
+          "description": "this is a course",
+          "learning_objectives": [
+            {
+              "uri": "https://eduflex.nl/data/lo/{GUID}",
+              "label": "",
+              "bloom_level": 3,
+              "bloom_level_label": "create",
+              "concepts": [
+                {
+                  "uri": "https://eduflex.nl/data/concept/{GUID}",
+                  "label": "",
+                  "description": ""
+                }
+              ]
+            },
+            {
+              "uri": "https://eduflex.nl/data/lo/{GUID}",
+              "label": "",
+              "bloom_level": 3,
+              "bloom_level_label": "create",
+              "concepts": [
+                {
+                  "uri": "https://eduflex.nl/data/concepts/{GUID}",
+                  "label": "",
+                  "description": ""
+                }
+              ]
+            }
+          ]
+        }
+      ]
     }
   ]
-}
