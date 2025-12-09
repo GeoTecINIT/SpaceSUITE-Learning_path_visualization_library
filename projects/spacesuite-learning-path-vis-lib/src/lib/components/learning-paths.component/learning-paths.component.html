@@ -117,7 +117,7 @@
         <!-- Tooltip per path -->
         @if (activeTooltip?.pathId === path.id) {
           <div
-            class="pointer-events-none fixed px-2 py-1 bg-gray-800 text-white text-xs rounded shadow-lg z-50"
+            class="pointer-events-none fixed px-2 py-1 bg-gray-800 text-white text-xs rounded shadow-lg z-50 md:w-[50vw] w-[80vw]"
             [style.left.px]="activeTooltip?.x"
             [style.top.px]="activeTooltip?.y"
           >
