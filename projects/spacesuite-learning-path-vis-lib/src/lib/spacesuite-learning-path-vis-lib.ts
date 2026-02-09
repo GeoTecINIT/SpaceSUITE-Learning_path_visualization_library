@@ -1,12 +1,10 @@
 import { NgModule } from '@angular/core';
-import { LearningPathComponent } from './components/learning-path.component/learning-path.component';
-import { LearningPathsComponent } from './components/learning-paths.component';
-
+import { LearningPathV1Component } from './components/learning-path-v1.component';
+import { MultipleLearningPathComponent } from './components/multiple-learning-path.component';
+import { LearningPathV2Component } from './components/learning-path-v2.component';
 @NgModule({
-  imports: [LearningPathComponent, LearningPathsComponent],
-  exports: [LearningPathComponent, LearningPathsComponent],
+  imports: [LearningPathV1Component, MultipleLearningPathComponent, LearningPathV2Component],
+  exports: [LearningPathV1Component, MultipleLearningPathComponent, LearningPathV2Component],
   providers: [],
 })
-export class SpacesuiteLearningPathVisLib {
-
-}
+export class SpacesuiteLearningPathVisLib {}

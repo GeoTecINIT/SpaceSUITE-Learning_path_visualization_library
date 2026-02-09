@@ -3,6 +3,7 @@ export interface Concept {
   label: string;
   description?: string;
   uri?: string;
+  completed?: boolean;
 }
 
 export interface LearningObjective {
@@ -13,6 +14,8 @@ export interface LearningObjective {
   bloom_level?: number;
   bloom_level_label?: string;
   concepts?: Concept[];
+  completed?: boolean;
+  conceptIds?: string[]; // References to concept IDs from the course
 }
 
 export interface Course {
@@ -20,6 +23,10 @@ export interface Course {
   label: string;
   description?: string;
   uri?: string;
+  duration?: string;
+  difficulty?: 'beginner' | 'intermediate' | 'advanced';
+  completed?: boolean;
+  progress?: number;
   x?: number; // grid/coordinate position (0..n)
   y?: number; // grid/coordinate position (0..n)
   learning_objectives?: LearningObjective[];
@@ -36,9 +43,10 @@ export interface LearningPath {
   uri?: string;
   label: string;
   description?: string;
-  courses?: Course[];
+  courses: Course[];
+  concepts: Concept[];
   links?: LearningLink[];
-
+  duration?: string;
   // zoom + pan state
   translateX?: number;
   translateY?: number;
@@ -53,5 +61,5 @@ export interface LearningPathStyleConfig {
   pendingColor?: string;
   cardWidth: number;
   cardHeight: number;
-  gap: number //px gap between grid cells horizontally/vertically
+  gap: number; //px gap between grid cells horizontally/vertically
 }

@@ -1,0 +1,25 @@
+<div class="min-h-screen py-12 px-4">
+  <!-- Iterate multiple learning paths -->
+  @for(path of learningPaths; track path){
+    <div
+      id="path-{{path.id}}"
+     class="rounded-xl w-full box-border shadow-sm mb-4 learning-path-container"
+      [ngStyle]="{
+        'color': styleConfig.textColor,
+        'background-color': styleConfig.backgroundColor,
+      }"
+      [class.border-indigo-200]="selectedPath?.id === path.id"
+      [class.border-3]="selectedPath?.id === path.id"
+      (click)="selectedPath = path; selectedCard = null">
+
+      <spacesuite-learning-path
+        [data]="path"
+        [styleConfig]="styleConfig"
+        [activePath]="selectedPath"
+        (clickCourseEvent)="onCourseClick($event)"
+        (viewCourseEvent)="onViewCourse($event)"
+        (changeActivePathEvent)="onActivePathChange($event)"
+      ></spacesuite-learning-path>
+    </div>
+  }
+</div>

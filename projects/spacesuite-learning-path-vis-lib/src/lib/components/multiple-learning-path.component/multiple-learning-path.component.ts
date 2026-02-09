@@ -1,39 +1,49 @@
 import {
-  Component, Input, ViewChildren, OnChanges, SimpleChanges,
-  ElementRef,QueryList, HostListener, AfterViewInit,
-  Output, EventEmitter
+  Component,
+  Input,
+  ViewChildren,
+  OnChanges,
+  SimpleChanges,
+  ElementRef,
+  QueryList,
+  HostListener,
+  AfterViewInit,
+  Output,
+  EventEmitter,
 } from '@angular/core';
 import { CommonModule, NgStyle } from '@angular/common';
 import { v4 as uuidv4 } from 'uuid';
 import { ReactiveFormsModule } from '@angular/forms';
 
 import { Concept, Course, LearningPath, LearningPathStyleConfig } from '../../models';
+import { LearningPathV1Component } from '../learning-path-v1.component';
 import { DEFAULT_STYLE_CONFIG } from '../../utils';
 
 @Component({
-  selector: 'spacesuite-learning-paths',
+  selector: 'spacesuite-multiple-learning-path',
   standalone: true,
-  imports: [NgStyle, CommonModule, ReactiveFormsModule],
-  templateUrl: './learning-paths.component.html',
-  styleUrl: './learning-paths.component.css',
+  imports: [NgStyle, CommonModule, LearningPathV1Component, ReactiveFormsModule],
+  templateUrl: './multiple-learning-path.component.html',
+  styleUrl: './multiple-learning-path.component.css',
 })
-export class LearningPathsComponent implements OnChanges, AfterViewInit {
+export class MultipleLearningPathComponent implements OnChanges, AfterViewInit {
   @Input({ required: true }) learningPaths!: LearningPath[];
 
   @Input() styleConfig: LearningPathStyleConfig = DEFAULT_STYLE_CONFIG;
 
   @Output() clickCourseEvent = new EventEmitter<Course>();
-  @Output() changeActivePathEvent = new EventEmitter<string | undefined>();
-  @Output() viewCourseEvent      = new EventEmitter<Course>();
+  @Output() changeActivePathEvent = new EventEmitter<LearningPath>();
+  @Output() viewCourseEvent = new EventEmitter<Course>();
 
-   /** Map: pathId → nodeId → ElementRef */
+  /** Map: pathId → nodeId → ElementRef */
   private cardElementRefs: Record<string, Record<string, ElementRef>> = {};
 
   /** Collect all card elements after rendering */
   @ViewChildren('cardEl') cardQuery!: QueryList<ElementRef>;
 
   /** Tooltip */
-  activeTooltip: { pathId: string; nodeId: string; text: string; x: number; y: number } | null = null;
+  activeTooltip: { pathId: string; nodeId: string; text: string; x: number; y: number } | null =
+    null;
 
   /** Selected card highlight */
   selectedCard: { pathId: string; nodeId: string } | null = null;
@@ -50,7 +60,7 @@ export class LearningPathsComponent implements OnChanges, AfterViewInit {
   maxScale = 3;
 
   // computed positions
-  coursesMap = new Map<string, Course & { left: number; top: number; }>();
+  coursesMap = new Map<string, Course & { left: number; top: number }>();
 
   constructor(private host: ElementRef) {}
 
@@ -60,13 +70,12 @@ export class LearningPathsComponent implements OnChanges, AfterViewInit {
     this.computePositions();
     // this.mapCardElements();
     // this.updateAllPaths();
-
   }
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes['learningPaths']) this.computePositions();
 
-    if(changes['styleConfig']) this.computePositions();
+    if (changes['styleConfig']) this.computePositions();
   }
 
   computePosition(path: LearningPath) {
@@ -81,7 +90,7 @@ export class LearningPathsComponent implements OnChanges, AfterViewInit {
     for (const n of path.courses || []) {
       n.id = n.id || uuidv4();
 
-      const left = (i * (this.styleConfig.cardWidth + 85)) +  this.styleConfig.gap;
+      const left = i * (this.styleConfig.cardWidth + 85) + this.styleConfig.gap;
       const top = 0 * this.styleConfig.gap;
       n.x = left;
       n.y = top;
@@ -93,12 +102,11 @@ export class LearningPathsComponent implements OnChanges, AfterViewInit {
         path.links?.push({
           from: path.courses![i - 1].id!,
           to: n.id!,
-          path: this.arrowPath(path.courses![i - 1].id!, n.id!)
-        } );
+          path: this.arrowPath(path.courses![i - 1].id!, n.id!),
+        });
       }
       i++;
     }
-
   }
   computePositions() {
     if (!this.learningPaths) return;
@@ -121,7 +129,6 @@ export class LearningPathsComponent implements OnChanges, AfterViewInit {
     const bx = b.left - 5;
     const by = b.top + this.styleConfig.cardHeight / 2;
 
-
     // simple cubic bezier for nicer curves
     const dx = Math.abs(bx - ax);
     const hx = Math.max(this.styleConfig.cardHeight / 2, dx / 2);
@@ -129,9 +136,9 @@ export class LearningPathsComponent implements OnChanges, AfterViewInit {
     return `M ${ax} ${ay} C ${ax + hx} ${ay} ${bx - hx} ${by} ${bx} ${by}`;
   }
 
-  getConcepts(course : Course) : Concept[]{
-    let concepts = []
-    for(let obj of course?.learning_objectives || []){
+  getConcepts(course: Course): Concept[] {
+    let concepts = [];
+    for (let obj of course?.learning_objectives || []) {
       for (let concept of obj.concepts || []) {
         concepts.push(concept);
       }
@@ -140,28 +147,33 @@ export class LearningPathsComponent implements OnChanges, AfterViewInit {
   }
 
   /** Background click clears selection */
-  onBackgroundClick(path: LearningPath) {
-    console.log(path);
-    this.selectedCard = null;
-    this.activeTooltip = null;
+  @HostListener('document:click', ['$event'])
+  onBackgroundClick(event: MouseEvent) {
+    const target = event.target as HTMLElement;
+    if (!target.closest('.learning-path-container')) {
+      this.selectedCard = null;
+      this.activeTooltip = null;
+      this.selectedPath = null;
+    }
   }
 
-  /** Card click */
-  onCardClick(course: Course, path: LearningPath, event: MouseEvent) {
-    event.stopPropagation();
-
+  onActivePathChange(path: LearningPath) {
     if (!path.id) return;
 
-    this.selectedCard = { pathId: path.id, nodeId: course.id || "" };
+    this.selectedCard = { pathId: path.id, nodeId: this.selectedCourse?.id || '' };
     this.selectedPath = path;
 
-    this.clickCourseEvent.emit(course);
-    this.changeActivePathEvent.emit(path.id);
-
+    if (this.selectedCourse) {
+      this.clickCourseEvent.emit(this.selectedCourse);
+    }
+    this.changeActivePathEvent.emit(path);
   }
 
-  onViewCourse(course: Course, event: MouseEvent) {
-    event.stopPropagation();
+  onCourseClick(course: Course) {
+    this.clickCourseEvent.emit(course);
+  }
+
+  onViewCourse(course: Course) {
     this.selectedCourse = course;
     this.viewCourseEvent.emit(course);
   }
@@ -186,13 +198,13 @@ export class LearningPathsComponent implements OnChanges, AfterViewInit {
     const mouseY = event.clientY - rect.top;
 
     // Calculate position in SVG coords before and after zoom
-    const svgXBefore = (mouseX / (path.scale || 1)) - (path.translateX || 0);
-    const svgYBefore = (mouseY / (path.scale || 1)) - (path.translateY || 0);
+    const svgXBefore = mouseX / (path.scale || 1) - (path.translateX || 0);
+    const svgYBefore = mouseY / (path.scale || 1) - (path.translateY || 0);
 
     path.scale = newScale;
 
-    const svgXAfter = (mouseX / path.scale) - (path.translateX || 0);
-    const svgYAfter = (mouseY / path.scale) - (path.translateY || 0);
+    const svgXAfter = mouseX / path.scale - (path.translateX || 0);
+    const svgYAfter = mouseY / path.scale - (path.translateY || 0);
 
     // Adjust translate to keep focus point stable
     path.translateX = (path.translateX || 0) + (svgXAfter - svgXBefore);
@@ -207,8 +219,8 @@ export class LearningPathsComponent implements OnChanges, AfterViewInit {
 
     this.activeTooltip = {
       pathId: path.id,
-      nodeId: course.id || "",
-      text: course.description || "",
+      nodeId: course.id || '',
+      text: course.description || '',
       x: event.clientX + 12,
       y: event.clientY + 12,
     };
@@ -219,7 +231,7 @@ export class LearningPathsComponent implements OnChanges, AfterViewInit {
     this.activeTooltip = null;
   }
 
-    /** Start panning */
+  /** Start panning */
   onPointerDown(event: PointerEvent, path: LearningPath) {
     if (!path) return;
     const target = event.target as HTMLElement;
@@ -270,6 +282,6 @@ export class LearningPathsComponent implements OnChanges, AfterViewInit {
   }
 
   private getPathIndex(path: LearningPath): number {
-    return this.learningPaths.findIndex((p) => p.id == path.id)
+    return this.learningPaths.findIndex((p) => p.id == path.id);
   }
 }

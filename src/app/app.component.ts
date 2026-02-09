@@ -1,7 +1,14 @@
 import { Component, signal, ChangeDetectionStrategy, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-import {LearningPathComponent, LearningPathsComponent, LearningPath, LearningPathStyleConfig, Course} from '../../dist/spacesuite-learning-path-vis-lib';
+import {
+  LearningPathV1Component,
+  MultipleLearningPathComponent,
+  LearningPathV2Component,
+  LearningPath,
+  LearningPathStyleConfig,
+  Course,
+} from '../../dist/spacesuite-learning-path-vis-lib';
 
 import { CourseComponent } from './components/course.component/course.component';
 import { LEARNING_PATHS } from './static/learning_paths';
@@ -9,43 +16,50 @@ import { LEARNING_PATHS } from './static/learning_paths';
 @Component({
   standalone: true,
   selector: 'app-root',
-  imports: [ CommonModule, LearningPathComponent, LearningPathsComponent, CourseComponent ],
+  imports: [
+    CommonModule,
+    LearningPathV1Component,
+    LearningPathV2Component,
+    MultipleLearningPathComponent,
+    CourseComponent,
+  ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AppComponent {
-  protected readonly title = signal('Example Title');
+  protected readonly title = signal('Learning Path Visualization Examples');
 
-  activeCardId = signal<string | undefined>(undefined);
-  activePathId: string | undefined = undefined;
+  activeCourse = signal<Course | undefined>(undefined);
+  activePath: LearningPath | null = null;
 
   selectedCourse: Course | null = null;
 
-  learning_paths : LearningPath[] = LEARNING_PATHS;
+  learning_paths: LearningPath[] = LEARNING_PATHS;
+
+  activeComponent = signal<'v1' | 'v2' | 'multiple'>('v1');
 
   myStyle = signal<LearningPathStyleConfig>({
-    textColor: "#000000",
-    backgroundColor: "#f1f1f1",
-    completedColor: "#28a745",
-    inProgressColor: "#17a2b8",
-    pendingColor: "#6c757d",
-    cardWidth: 220,
+    textColor: '#000000',
+    backgroundColor: '#f1f1f1',
+    completedColor: '#28a745',
+    inProgressColor: '#17a2b8',
+    pendingColor: '#6c757d',
+    cardWidth: 250,
     cardHeight: 160,
-    gap: 20
+    gap: 20,
   });
 
   @ViewChild(CourseComponent) courseComponent!: CourseComponent;
 
-  constructor() {
+  constructor() {}
+
+  onClickCourse(course: Course) {
+    this.activeCourse.set(course);
   }
 
-  onClickCourse(cardId: any) {
-    this.activeCardId.set(cardId);
-  }
-
-  onActivePathChange(pathId: any) {
-    this.activePathId = pathId;
+  onActivePathChange(path: LearningPath) {
+    this.activePath = path;
   }
 
   onViewCourse(course: Course) {
@@ -57,15 +71,13 @@ export class AppComponent {
     this.selectedCourse = null;
   }
 
-  onShow(event: any) {
-
-  }
+  onShow(event: any) {}
 
   onChangeWidth(event: Event) {
-    this.myStyle.set({...this.myStyle(), cardWidth: +(event.target as HTMLInputElement).value})
+    this.myStyle.set({ ...this.myStyle(), cardWidth: +(event.target as HTMLInputElement).value });
   }
 
   onChangeHeight(event: Event) {
-    this.myStyle.set({...this.myStyle(), cardHeight: +(event.target as HTMLInputElement).value})
+    this.myStyle.set({ ...this.myStyle(), cardHeight: +(event.target as HTMLInputElement).value });
   }
 }

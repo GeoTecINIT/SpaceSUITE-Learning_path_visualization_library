@@ -22,3 +22,20 @@ svg { z-index: 0; }
 .pan-zoom-wrapper.dragging {
   cursor: grabbing;
 }
+
+
+/* Animations */
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.learning-path-details.expanded > * {
+  animation: slideDown 0.3s ease-out;
+}
