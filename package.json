@@ -31,6 +31,7 @@
     "@angular/core": "^20.3.0",
     "@angular/forms": "^20.3.0",
     "@angular/platform-browser": "^20.3.0",
+    "@angular/platform-browser-dynamic": "^21.1.1",
     "@angular/router": "^20.3.0",
     "@tailwindcss/line-clamp": "^0.4.4",
     "@tailwindcss/postcss": "^4.1.14",
@@ -43,6 +44,7 @@
     "zone.js": "^0.15.1"
   },
   "devDependencies": {
+    "@angular-devkit/build-angular": "^21.1.1",
     "@angular/build": "^20.3.12",
     "@angular/cli": "^20.3.0",
     "@angular/compiler-cli": "^20.3.0",

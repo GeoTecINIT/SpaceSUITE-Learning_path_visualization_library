@@ -51,7 +51,7 @@
             "index": "src/index.html",
             "inlineStyleLanguage": "css",
             "tsConfig": "tsconfig.app.json",
-            "polyfills": ["zone.js"],
+            "polyfills": ["src/polyfills.ts"],
             "assets": [
               {
                 "glob": "**/*",
@@ -104,6 +104,9 @@
         "test": {
           "builder": "@angular/build:karma",
           "options": {
+            "main": "src/test.ts",
+            "polyfills": ["src/polyfills.ts"],
+            "karmaConfig": "karma.conf.js",
             "tsConfig": "tsconfig.spec.json",
             "assets": [
               {
