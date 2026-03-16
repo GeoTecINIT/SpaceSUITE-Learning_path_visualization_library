@@ -1,0 +1,109 @@
+<div class="mb-8">
+  <!-- Eyebrow -->
+  <div class="flex items-center gap-2 mb-3">
+    <div class="w-1.5 h-1.5 rounded-full animate-pulse" style="background: var(--lp-accent)"></div>
+    <span class="text-xs font-semibold uppercase tracking-widest" style="color: var(--lp-accent-text)">
+      {{ config.eyebrowLabel }}
+    </span>
+  </div>
+
+  <!-- Title -->
+  <h1 class="text-3xl font-black tracking-tight mb-3 leading-tight" style="color: var(--lp-accent-text)">
+    {{ learningPath.label }}
+  </h1>
+  @if (themeService.showDescriptionPanel()) {
+  <p class="text-sm leading-relaxed" style="color: var(--lp-text-secondary)">
+    {{ learningPath.description }}
+  </p>
+  }
+
+  <!-- Stats row -->
+  @if (themeService.showStatsPanel()) {
+  <div class="flex items-center gap-6 mt-5 pt-5 flex-wrap border-t transition-colors duration-300"
+    style="border-color: var(--lp-border-subtle)">
+
+    <div class="flex items-center gap-2">
+      <div class="w-8 h-8 rounded-lg flex items-center justify-center transition-colors duration-300"
+        style="background: var(--lp-accent-muted); border: 1px solid var(--lp-accent-border)">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+          <rect x="1" y="3" width="12" height="9" rx="1.5" stroke="var(--lp-stat-icon)" stroke-width="1.25" />
+          <path d="M1 6h12" stroke="var(--lp-stat-icon)" stroke-width="1.25" />
+          <path d="M4 1v2M10 1v2" stroke="var(--lp-stat-icon)" stroke-width="1.25" stroke-linecap="round" />
+        </svg>
+      </div>
+      <div>
+        <div class="text-sm font-bold tabular-nums" style="color: var(--lp-text-heading)">{{ learningPath.courses.length
+          }}</div>
+        <div class="text-xs" style="color: var(--lp-accent-text)">Courses</div>
+      </div>
+    </div>
+
+    <div class="w-px h-8 transition-colors duration-300" style="background: var(--lp-border)"></div>
+
+    <div class="flex items-center gap-2">
+      <div class="w-8 h-8 rounded-lg flex items-center justify-center"
+        style="background: rgba(167,139,250,0.10); border: 1px solid var(--lp-accent-border)">
+        <svg class="w-5 h-5 " fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke="var(--lp-accent-text)" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z">
+          </path>
+        </svg>
+      </div>
+      <div>
+        <div class="text-sm font-bold tabular-nums" style="color: var(--lp-text-heading)">{{ concepts.length }}</div>
+        <div class="text-xs" style="color: var(--lp-accent-text)">Concept{{ concepts.length > 1 ? 's' : '' }}</div>
+      </div>
+    </div>
+
+    <div class="w-px h-8 transition-colors duration-300" style="background: var(--lp-border)"></div>
+
+    <div class="flex items-center gap-2">
+      <div class="w-8 h-8 rounded-lg flex items-center justify-center"
+        style="background: rgba(167,139,250,0.10); border: 1px solid var(--lp-accent-border)">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+          <path d="M7 1L8.5 5H13L9.5 7.5L11 12L7 9.5L3 12L4.5 7.5L1 5H5.5L7 1Z" stroke="var(--lp-accent-text)"
+            stroke-width="1.25" stroke-linejoin="round" />
+        </svg>
+      </div>
+      <div>
+        <div class="text-sm font-bold tabular-nums" style="color: var(--lp-text-heading)">{{ totalObjectives }}</div>
+        <div class="text-xs" style="color: var(--lp-accent-text)">Objectives</div>
+      </div>
+    </div>
+
+    @if (learningPath.duration || totalDuration) {
+
+    <div class="w-px h-8 transition-colors duration-300" style="background: var(--lp-border)"></div>
+
+    <div class="flex items-center gap-2">
+      <div class="w-8 h-8 rounded-lg flex items-center justify-center"
+        style="background: rgba(167,139,250,0.10); border: 1px solid var(--lp-accent-border)">
+        <svg class="w-5 h-5 " fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke="var(--lp-accent-text)" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+        </svg>
+      </div>
+      <div>
+        <div class="text-sm font-bold tabular-nums" style="color: var(--lp-text-heading)">{{ totalDuration }}</div>
+        <div class="text-xs"
+          [style.color]="themeService.colorMode() == 'dark' ? 'var(--lp-text-primary)': 'var(--lp-accent-text)'">
+          Duration</div>
+      </div>
+    </div>
+    }
+
+    <div class="w-px h-8 transition-colors duration-300" style="background: var(--lp-border)"></div>
+
+    <div class="flex items-center gap-3 flex-1 min-w-48">
+      <div class="text-sm font-bold tabular-nums w-9" style="color: var(--lp-text-heading)">{{ overallProgress }}%</div>
+      <div class="flex-1 h-1.5 rounded-full overflow-hidden transition-colors duration-300"
+        style="background: var(--lp-border)">
+        <div class="h-full rounded-full transition-all duration-700" [style.width.%]="overallProgress"
+          style="background: linear-gradient(to right, var(--lp-accent), var(--lp-accent2))"></div>
+      </div>
+      <div class="text-xs" style="color: var(--lp-accent-text)">Overall</div>
+    </div>
+
+  </div>
+  }
+</div>

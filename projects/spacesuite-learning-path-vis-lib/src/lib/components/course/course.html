@@ -1,0 +1,70 @@
+<div
+  class="relative flex flex-col h-full rounded-2xl border transition-all duration-300 cursor-pointer group overflow-hidden"
+  [ngClass]="cardClasses" [style]="cardStyle" (click)="selected.emit(course)" (keydown.enter)="selected.emit(course)"
+  (keydown.space)="selected.emit(course)" tabindex="0" role="button" [attr.aria-label]="'Course: ' + course.label">
+  <!-- Completed glow overlay -->
+  @if (course.completed) {
+  <div class="absolute inset-0 bg-emerald-500/5 pointer-events-none rounded-2xl"></div>
+  }
+  <!-- Active ring -->
+  @if (isActive) {
+  <div class="absolute inset-0 rounded-2xl pointer-events-none" style="box-shadow: 0 0 0 2px var(--lp-accent-border)">
+  </div>
+  }
+
+  <!-- Header: step + difficulty + duration -->
+  <div class="flex items-start justify-between p-5 pb-3">
+    <div class="flex items-center gap-3">
+      <div
+        class="shrink-0 w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold border transition-colors duration-300"
+        [ngClass]="course.completed ? 'bg-emerald-500/20 border-emerald-500/50 text-emerald-400' : ''"
+        [style]="!course.completed ? stepStyle : ''">
+        @if (course.completed) {
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+          <path d="M2.5 7L5.5 10L11.5 4" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+            stroke-linejoin="round" />
+        </svg>
+        } @else {
+        {{ stepNumber }}
+        }
+      </div>
+      <lp-difficulty-badge [difficulty]="course.difficulty" />
+    </div>
+
+    @if (config.showDuration && course.duration) {
+    <div class="flex items-center gap-1.5 text-xs px-2.5 py-1 rounded-full border transition-colors duration-300"
+      style="color: var(--lp-text-secondary); background: var(--lp-surface-overlay); border-color: var(--lp-border-subtle)">
+      <svg width="11" height="11" viewBox="0 0 12 12" fill="none">
+        <circle cx="6" cy="6" r="5" stroke="currentColor" stroke-width="1.25" />
+        <path d="M6 3.5V6L7.5 7.5" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" />
+      </svg>
+      {{ course.duration }}
+    </div>
+    }
+  </div>
+
+  <!-- Title & description -->
+  <div class="px-5 pb-3 flex-1">
+    <h3 class="text-sm font-bold leading-snug mb-1.5 transition-colors" style="color: var(--lp-accent-primary)">
+      {{ course.label }}
+    </h3>
+    @if (course.description) {
+    <p class="text-xs leading-relaxed line-clamp-3" style="color: var(--lp-text-secondary)">{{ course.description }}</p>
+    }
+  </div>
+
+  <!-- Objectives count -->
+  <div class="px-5 pb-3">
+    <div class="flex items-center gap-2 text-xs" style="color: var(--lp-text-muted)">
+      <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+        <path d="M1 3h10M1 6h7M1 9h5" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" />
+      </svg>
+      <span>{{ course.learning_objectives?.length ?? 0 }} learning objectives</span>
+    </div>
+  </div>
+
+  <!-- Progress bar -->
+  <div class="px-5 pb-5 mt-auto">
+    <lp-progress-bar [progress]="course.progress ?? 100" />
+  </div>
+</div>

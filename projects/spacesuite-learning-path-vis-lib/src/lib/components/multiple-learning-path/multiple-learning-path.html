@@ -1,0 +1,18 @@
+<div class="min-h-screen">
+  <!-- Iterate multiple learning paths -->
+  @for(path of learningPaths; track path; let rowIndex = $index; let isLast = $last){
+  <div id="path-{{path.id}}"
+    class="rounded-xl px-5 pt-5 w-full box-border transition-colors duration-300 shadow-sm mb-4 learning-path-container"
+    [ngStyle]="{
+
+      }" [class.border-indigo-200]="selectedPath?.id === path.id" [class.border-3]="selectedPath?.id === path.id"
+    (click)="selectedPath = path">
+
+    <spacesuite-learning-path [learningPath]="path" (courseSelected)="onCourseClick($event)"></spacesuite-learning-path>
+  </div>
+  @if (!isLast) {
+  <div class="border-t transition-colors duration-300 my-5" style="border-color: var(--lp-border)"></div>
+  }
+
+  }
+</div>

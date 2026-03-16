@@ -1,0 +1,10 @@
+<div class="w-full">
+  <div class="flex justify-between items-center mb-1.5">
+    <span class="text-xs font-medium" [style.color]="'var(--lp-text-secondary)'">Progress</span>
+    <span class="text-xs font-bold tabular-nums" [style.color]="'var(--lp-text-secondary)'">{{ progress }}%</span>
+  </div>
+  <div class="h-1.5 w-full bg-slate-700/60 rounded-full overflow-hidden">
+    <div class="h-full rounded-full transition-all duration-700 ease-out" [style.width.%]="progress"
+      [style.background]="'linear-gradient(to right, var(--lp-accent), var(--lp-accent2))'"></div>
+  </div>
+</div>

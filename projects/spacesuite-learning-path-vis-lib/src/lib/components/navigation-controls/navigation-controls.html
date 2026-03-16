@@ -1,0 +1,34 @@
+<div class="flex items-center gap-3">
+  <!-- Prev -->
+  <button (click)="prev.emit()" [disabled]="!canGoPrev" aria-label="Previous course"
+    class="flex items-center justify-center w-9 h-9 rounded-full border transition-all duration-200 focus:outline-none focus-visible:ring-2"
+    [style.border-color]="'var(--lp-border)'" [style.color]="'var(--lp-text-secondary)'"
+    [style.opacity]="canGoPrev ? '1' : '0.35'" [style.cursor]="canGoPrev ? 'pointer' : 'not-allowed'">
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+      <path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"
+        stroke-linejoin="round" />
+    </svg>
+  </button>
+
+  <!-- Dot indicators -->
+  <div class="flex items-center gap-1.5" role="tablist" aria-label="Course navigation">
+    @for (dot of dotsArray; track $index) {
+    <button (click)="goTo.emit($index)" [attr.aria-label]="'Go to course ' + ($index + 1)"
+      [attr.aria-selected]="$index === currentIndex" role="tab"
+      class="rounded-full transition-all duration-300 focus:outline-none"
+      [style.width]="$index === currentIndex ? '20px' : '8px'" [style.height]="'8px'"
+      [style.background]="$index === currentIndex ? 'var(--lp-accent)' : 'var(--lp-border)'"></button>
+    }
+  </div>
+
+  <!-- Next -->
+  <button (click)="next.emit()" [disabled]="!canGoNext" aria-label="Next course"
+    class="flex items-center justify-center w-9 h-9 rounded-full border transition-all duration-200 focus:outline-none focus-visible:ring-2"
+    [style.border-color]="'var(--lp-border)'" [style.color]="'var(--lp-text-secondary)'"
+    [style.opacity]="canGoNext ? '1' : '0.35'" [style.cursor]="canGoNext ? 'pointer' : 'not-allowed'">
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+      <path d="M6 3L11 8L6 13" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"
+        stroke-linejoin="round" />
+    </svg>
+  </button>
+</div>

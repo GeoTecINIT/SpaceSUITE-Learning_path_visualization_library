@@ -24,7 +24,7 @@ export interface Course {
   description?: string;
   uri?: string;
   duration?: string;
-  difficulty?: 'beginner' | 'intermediate' | 'advanced';
+  difficulty: 'beginner' | 'intermediate' | 'advanced';
   completed?: boolean;
   progress?: number;
   x?: number; // grid/coordinate position (0..n)
@@ -47,19 +47,35 @@ export interface LearningPath {
   concepts: Concept[];
   links?: LearningLink[];
   duration?: string;
-  // zoom + pan state
   translateX?: number;
   translateY?: number;
   scale?: number;
 }
 
-export interface LearningPathStyleConfig {
-  textColor?: string;
-  backgroundColor?: string;
-  completedColor?: string;
-  inProgressColor?: string;
-  pendingColor?: string;
-  cardWidth: number;
-  cardHeight: number;
-  gap: number; //px gap between grid cells horizontally/vertically
-}
+// Static display config (not theme-driven)
+
+export const DIFFICULTY_CONFIG: Record<
+  Course['difficulty'],
+  { label: string; color: string; bg: string }
+> = {
+  beginner: {
+    label: 'Beginner',
+    color: 'text-emerald-400',
+    bg: 'bg-emerald-400/10 border-emerald-400/30',
+  },
+  intermediate: {
+    label: 'Intermediate',
+    color: 'text-amber-400',
+    bg: 'bg-amber-400/10 border-amber-400/30',
+  },
+  advanced: { label: 'Advanced', color: 'text-rose-400', bg: 'bg-rose-400/10 border-rose-400/30' },
+};
+
+export const BLOOM_LEVELS: Record<number, { label: string; color: string }> = {
+  1: { label: 'Remember', color: '#94a3b8' },
+  2: { label: 'Understand', color: '#60a5fa' },
+  3: { label: 'Apply', color: '#34d399' },
+  4: { label: 'Analyze', color: '#fbbf24' },
+  5: { label: 'Evaluate', color: '#f97316' },
+  6: { label: 'Create', color: '#a78bfa' },
+};

@@ -1,69 +1,131 @@
-<div class="p-4 flex flex-col h-full gap-4">
-  <h3 class="text-xl font-bold text-indigo-500">{{title()}}</h3>
+<div class="min-h-screen transition-colors duration-500"
+  style="background: var(--lp-bg); color: var(--lp-text-primary)">
+  <!-- Toolbar -->
+  <div class="border-b backdrop-blur-sm sticky top-0 z-30 transition-colors duration-300"
+    style="border-color: var(--lp-border); background: var(--lp-surface-overlay)">
+    <div class="max-w-5xl mx-auto px-6 py-3 flex items-center justify-between gap-4">
+      <div class="flex items-center gap-2">
+        <div class="w-2 h-2 rounded-full animate-pulse" style="background: var(--lp-accent)"></div>
+        <h3 class="text-xl font-bold tracking-wide" style="color: var(--lp-text-primary)">{{title()}}</h3>
+      </div>
+      <button (click)="toggleDarkMode()"
+        class="w-6 h-6 flex items-center justify-center rounded-sm border border-slate-200 dark:border-slate-700 bg-slate-100 dark:bg-slate-600 text-slate-500 dark:text-slate-400 hover:text-cyan-500 dark:hover:text-cyan-400 hover:border-cyan-400/50 transition-all duration-200 cursor-pointer"
+        [attr.aria-label]="isDarkMode() ? 'Switch to light mode' : 'Switch to dark mode'"
+        title="{{ isDarkMode() ? 'Switch to light mode' : 'Switch to dark mode' }}">
+        @if (isDarkMode()) {
+        <!-- Sun icon for light mode -->
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+        </svg>
+        } @else {
+        <!-- Moon icon for dark mode -->
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+        </svg>
+        }
+      </button>
+    </div>
+    <!-- Style controls row — always visible -->
+    <div class="max-w-5xl mx-auto px-6 py-2 flex items-center gap-6 flex-wrap border-t transition-colors duration-300"
+      style="border-color: var(--lp-border-subtle)">
+      <span class="text-xs uppercase tracking-widest font-semibold"
+        style="color: var(--lp-text-muted)">Configuration</span>
 
+      <div class="flex items-center gap-2">
+        <label class="text-xs" style="color: var(--lp-text-secondary)">Theme color</label>
+        <input type="color" [value]="customHex()" (input)="onColorInput($event)"
+          class="w-8 h-8 rounded cursor-pointer border bg-transparent" style="border-color: var(--lp-border)"
+          title="Pick a brand color" />
+        <span class="text-xs font-mono" style="color: var(--lp-text-secondary)">{{ customHex() }}</span>
+      </div>
 
-  <!-- Add toggle between different learning path components -->
-  <div class="flex gap-4">
-    <button (click)="activeComponent.set('v1')" [class.bg-indigo-500]="activeComponent() === 'v1'" class="px-4 py-2 rounded text-white bg-indigo-300 cursor-pointer">Single Horizontally aligned path</button>
-    <button (click)="activeComponent.set('multiple')" [class.bg-indigo-500]="activeComponent() === 'multiple'" class="px-4 py-2 rounded text-white bg-indigo-300 cursor-pointer">Multiple Horizontally aligned Paths</button>
-    <button (click)="activeComponent.set('v2')" [class.bg-indigo-500]="activeComponent() === 'v2'" class="px-4 py-2 rounded text-white bg-indigo-300 cursor-pointer">Vertically aligned Path</button>
+      <!-- Card width slider -->
+      <label class="flex items-center gap-2 text-xs" style="color: var(--lp-text-secondary)">
+        Card width
+        <input type="range" min="200" max="400" step="10" [value]="themeService.cardWidth()"
+          (input)="onCardWidthChange($event)" class="w-28 accent-(--lp-accent)" />
+        <span class="font-mono w-10" style="color: var(--lp-text-primary)">{{ themeService.cardWidth() }}px</span>
+      </label>
+
+      <!-- Arrow width slider -->
+      <label class="flex items-center gap-2 text-xs" style="color: var(--lp-text-secondary)">
+        Arrow width
+        <input type="range" min="24" max="80" step="4" [value]="themeService.arrowWidth()"
+          (input)="onArrowWidthChange($event)" class="w-24 accent-(--lp-accent)" />
+        <span class="font-mono w-10" style="color: var(--lp-text-primary)">{{ themeService.arrowWidth() }}px</span>
+      </label>
+
+      <!-- Description panel toggle -->
+      <label class="flex items-center gap-2 text-xs  cursor-pointer select-none"
+        style="color: var(--lp-text-secondary)">
+        <div class="relative w-9 h-5 rounded-full transition-colors duration-200 cursor-pointer"
+          [style.background]="themeService.showDescriptionPanel() ? 'var(--lp-accent)' : 'var(--lp-border)'"
+          (click)="themeService.setDescriptionPanel(!themeService.showDescriptionPanel())">
+          <span class="absolute top-0.5 left-0.5 w-4 h-4 bg-white rounded-full shadow transition-transform duration-200"
+            [style.transform]="themeService.showDescriptionPanel() ? 'translateX(16px)' : 'translateX(0)'"></span>
+        </div>
+        Learning path description
+      </label>
+
+      <!-- Detail panel toggle -->
+      <label class="flex items-center gap-2 text-xs  cursor-pointer select-none"
+        style="color: var(--lp-text-secondary)">
+        <div class="relative w-9 h-5 rounded-full transition-colors duration-200 cursor-pointer"
+          [style.background]="themeService.showDetailPanel() ? 'var(--lp-accent)' : 'var(--lp-border)'"
+          (click)="themeService.setDetailPanel(!themeService.showDetailPanel())">
+          <span class="absolute top-0.5 left-0.5 w-4 h-4 bg-white rounded-full shadow transition-transform duration-200"
+            [style.transform]="themeService.showDetailPanel() ? 'translateX(16px)' : 'translateX(0)'"></span>
+        </div>
+        Course detail panel
+      </label>
+
+      <!-- Stats panel toggle -->
+      <label class="flex items-center gap-2 text-xs  cursor-pointer select-none"
+        style="color: var(--lp-text-secondary)">
+        <div class="relative w-9 h-5 rounded-full transition-colors duration-200 cursor-pointer"
+          [style.background]="themeService.showStatsPanel() ? 'var(--lp-accent)' : 'var(--lp-border)'"
+          (click)="themeService.setStatsPanel(!themeService.showStatsPanel())">
+          <span class="absolute top-0.5 left-0.5 w-4 h-4 bg-white rounded-full shadow transition-transform duration-200"
+            [style.transform]="themeService.showStatsPanel() ? 'translateX(16px)' : 'translateX(0)'"></span>
+        </div>
+        Statistics
+      </label>
+
+      <!-- Add toggle between different learning path components -->
+      <div class="flex w-full items-center justify-between md:flex-row flex-col gap-3">
+        <button (click)="activeComponent.set('v1')" [class.bg-indigo-500]="activeComponent() === 'v1'"
+          class="px-4 py-2 rounded text-white bg-indigo-300 cursor-pointer w-full">
+          Single Horizontally aligned path</button>
+        <button (click)="activeComponent.set('multiple')" [class.bg-indigo-500]="activeComponent() === 'multiple'"
+          class="px-4 py-2 rounded text-white bg-indigo-300 cursor-pointer w-full">
+          Multiple Horizontally aligned paths
+        </button>
+        <button (click)="activeComponent.set('v2')" [class.bg-indigo-500]="activeComponent() === 'v2'"
+          class="px-4 py-2 rounded text-white bg-indigo-300 cursor-pointer w-full">
+          Vertically aligned Path
+        </button>
+      </div>
+    </div>
+
   </div>
 
-  @if(activeComponent() !== 'v2') {
-    <!-- Controls -->
-    <div class="text-gray-700">
-      Adjust the sliders below to change the card dimensions. Click on a learning path to select it and view its courses.
+  <div class="max-w-8xl mx-auto pt-8 pb-4">
+
+    <div class="px-4 flex flex-col h-full gap-3">
+      @if(activeComponent() === 'v1' && learning_paths.length > 0) {
+      <spacesuite-learning-path [learningPath]="learning_paths[0]" />
+      }
+      @else if(activeComponent() === 'v2') {
+      @for(path of learning_paths; track path){
+      <spacesuite-learning [learningPath]="path" [activePath]="activePath"></spacesuite-learning>
+      }
+      }
+      @else if(activeComponent() === 'multiple') {
+      <spacesuite-multiple-learning-path [learningPaths]="learning_paths"
+        (clickCourseEvent)="onClickCourse($event)"></spacesuite-multiple-learning-path>
+      }
     </div>
-    <div class="grid grid-cols-4 gap-4">
-      <div class="relative mb-6">
-        <label for="range-input-width" class="text-gray-600">Card Width</label>
-        <input id="range-input-width" (change)="onChangeWidth($event)" type="range" value="200" min="200" max="500" step="10" class="w-full h-2 bg-neutral-quaternary rounded-full appearance-none cursor-pointer">
-        <span class="text-sm text-body absolute start-0 -bottom-6">200</span>
-        <span class="text-sm text-body absolute end-0 -bottom-6">500</span>
-      </div>
-
-      <div class="relative mb-6">
-        <label for="range-input-height" class="text-gray-600">Card Height</label>
-        <input id="range-input-height" (change)="onChangeHeight($event)" type="range" value="150" min="150" step="10" max="500" class="w-full h-2 bg-neutral-quaternary rounded-full appearance-none cursor-pointer">
-        <span class="text-sm text-body absolute start-0 -bottom-6">150</span>
-        <span class="text-sm text-body absolute end-0 -bottom-6">500</span>
-      </div>
-    </div>
-  }
-
-  @if(activeComponent() === 'v1') {
-    @for(path of learning_paths; track path){
-      <spacesuite-learning-path
-        [data]="path"
-        [styleConfig]="myStyle()"
-        [activePath]="activePath"
-        (clickCourseEvent)="onClickCourse($event)"
-        (changeActivePathEvent)="onActivePathChange($event)"
-        (viewCourseEvent)="onViewCourse($event)"
-      ></spacesuite-learning-path>
-    }
-  }
-  @else if(activeComponent() === 'v2') {
-    @for(path of learning_paths; track path){
-      <spacesuite-learning
-        [data]="path"
-        [styleConfig]="myStyle()"
-        [activePath]="activePath"
-      ></spacesuite-learning>
-    }
-  }
-  @else if(activeComponent() === 'multiple') {
-    <spacesuite-multiple-learning-path
-      [learningPaths]="learning_paths"
-      [styleConfig]="myStyle()"
-      (clickCourseEvent)="onClickCourse($event)"
-      (viewCourseEvent)="onViewCourse($event)"
-    ></spacesuite-multiple-learning-path>
-  }
-
-  <lib-course-component
-    [course]="selectedCourse"
-    (close)="onClose($event)"
-  ></lib-course-component>
-
+  </div>
 </div>

@@ -1,0 +1,12 @@
+<div class="flex items-center justify-center shrink-0 transition-all duration-300"
+  [style.width.px]="themeService.arrowWidth()" aria-hidden="true">
+  <!-- Horizontal line — fills available width minus the arrowhead -->
+  <div class="h-px flex-1 transition-all duration-300" [style.background]="'var(--lp-step-border)'"></div>
+
+  <!-- Arrowhead SVG — scales proportionally with arrowWidth -->
+  <svg [attr.height]="arrowheadSize()" width="10" viewBox="0 0 10 10" fill="none"
+    class="shrink-0 transition-all duration-300" [style.color]="'var(--lp-step-border)'">
+    <path d="M0 5L8 5M8 5L4 1M8 5L4 9" stroke="currentColor" [attr.stroke-width]="strokeWidth()" stroke-linecap="round"
+      stroke-linejoin="round" />
+  </svg>
+</div>

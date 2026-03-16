@@ -1,16 +1,15 @@
-import { Component, signal, ChangeDetectionStrategy, ViewChild } from '@angular/core';
+import { Component, signal, ChangeDetectionStrategy, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import {
-  LearningPathV1Component,
+  LearningPathComponent,
   MultipleLearningPathComponent,
-  LearningPathV2Component,
+  LearningPathVerticalComponent,
   LearningPath,
-  LearningPathStyleConfig,
   Course,
+  ThemeService,
 } from '../../dist/spacesuite-learning-path-vis-lib';
 
-import { CourseComponent } from './components/course.component/course.component';
 import { LEARNING_PATHS } from './static/learning_paths';
 
 @Component({
@@ -18,10 +17,9 @@ import { LEARNING_PATHS } from './static/learning_paths';
   selector: 'app-root',
   imports: [
     CommonModule,
-    LearningPathV1Component,
-    LearningPathV2Component,
+    LearningPathComponent,
+    LearningPathVerticalComponent,
     MultipleLearningPathComponent,
-    CourseComponent,
   ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
@@ -29,55 +27,59 @@ import { LEARNING_PATHS } from './static/learning_paths';
 })
 export class AppComponent {
   protected readonly title = signal('Learning Path Visualization Examples');
+  readonly themeService = inject(ThemeService);
 
-  activeCourse = signal<Course | undefined>(undefined);
+  customHex = signal('#a78bfa');
+  // Pattern 2 — cycling through preset accent colors via [themeColor] input
+  private readonly inputColors = ['#6366f1', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6'];
+  inputThemeColor = signal(this.inputColors[0]);
+
   activePath: LearningPath | null = null;
-
-  selectedCourse: Course | null = null;
-
+  selectedCourse = signal<Course | null>(null);
   learning_paths: LearningPath[] = LEARNING_PATHS;
 
   activeComponent = signal<'v1' | 'v2' | 'multiple'>('v1');
 
-  myStyle = signal<LearningPathStyleConfig>({
-    textColor: '#000000',
-    backgroundColor: '#f1f1f1',
-    completedColor: '#28a745',
-    inProgressColor: '#17a2b8',
-    pendingColor: '#6c757d',
-    cardWidth: 250,
-    cardHeight: 160,
-    gap: 20,
-  });
-
-  @ViewChild(CourseComponent) courseComponent!: CourseComponent;
-
   constructor() {}
 
+  onColorInput(event: Event) {
+    const hex = (event.target as HTMLInputElement).value;
+    this.customHex.set(hex);
+    this.themeService.setCustom({ accentColor: hex });
+  }
+
+  onCardWidthChange(event: Event) {
+    const value = Number((event.target as HTMLInputElement).value);
+    this.themeService.setLayout({ cardWidth: value });
+  }
+
+  onArrowWidthChange(event: Event) {
+    const value = Number((event.target as HTMLInputElement).value);
+    this.themeService.setLayout({ arrowWidth: value });
+  }
+
+  onPanelClosed() {
+    console.log('[demo] panelClosed');
+  }
+
+  isDarkMode(): boolean {
+    return this.themeService.colorMode() == 'dark';
+  }
+
+  toggleDarkMode() {
+    this.themeService.toggleColorMode();
+  }
+
+  bgStyle = () => {
+    const vars = this.themeService.activeVars();
+    return `background-image: radial-gradient(ellipse at 20% 20%, ${vars['--lp-bg-glow1']} 0%, transparent 60%), radial-gradient(ellipse at 80% 80%, ${vars['--lp-bg-glow2']} 0%, transparent 60%)`;
+  };
+
   onClickCourse(course: Course) {
-    this.activeCourse.set(course);
+    this.selectedCourse.set(course);
   }
 
   onActivePathChange(path: LearningPath) {
     this.activePath = path;
-  }
-
-  onViewCourse(course: Course) {
-    this.selectedCourse = course;
-    this.courseComponent.show();
-  }
-
-  onClose(event: any) {
-    this.selectedCourse = null;
-  }
-
-  onShow(event: any) {}
-
-  onChangeWidth(event: Event) {
-    this.myStyle.set({ ...this.myStyle(), cardWidth: +(event.target as HTMLInputElement).value });
-  }
-
-  onChangeHeight(event: Event) {
-    this.myStyle.set({ ...this.myStyle(), cardHeight: +(event.target as HTMLInputElement).value });
   }
 }

@@ -1,0 +1,63 @@
+<div class="lp-root w-full">
+
+  <!-- Optional theme selector bar -->
+  @if (config.showThemeSelector) {
+  <div class="flex items-center justify-end mb-6">
+    <lp-theme-selector />
+  </div>
+  }
+
+  <!-- Path header + stats -->
+  <lp-learning-path-header [learningPath]="learningPath" />
+
+  <!-- Track label + navigation -->
+  <div class="flex items-center justify-between mb-4">
+    <div class="flex items-center gap-2">
+      <span class="text-xs font-semibold uppercase tracking-widest" style="color: var(--lp-text-muted)">
+        {{ config.trackLabel }}
+      </span>
+      <span class="text-xs font-mono tabular-nums" style="color: var(--lp-text-muted)">
+        {{ currentIndex() + 1 }} / {{ learningPath.courses.length }}
+      </span>
+    </div>
+    <lp-navigation-controls [currentIndex]="currentIndex()" [total]="learningPath.courses.length"
+      (prev)="navigatePrev()" (next)="navigateNext()" (goTo)="navigateTo($event)" />
+  </div>
+
+  <!-- Course carousel — card and arrow widths are reactive signals -->
+  <div class="relative overflow-hidden">
+    <div
+      class="flex items-stretch p-2 md:pl-10 gap-0 transition-transform duration-500 ease-[cubic-bezier(0.25,0.46,0.45,0.94)]"
+      [style.transform]="'translateX(' + translateX() + ')'" role="list" aria-label="Courses">
+      @for (course of learningPath.courses; track course.id; let i = $index; let last = $last) {
+      <div class="flex items-stretch shrink-0 transition-all duration-500" [style.width.px]="themeService.cardWidth()"
+        [style.opacity]="getCardOpacity(i)" role="listitem">
+        <lp-course class="w-full" [course]="course" [stepNumber]="i + 1" [isActive]="selectedCourse()?.id === course.id"
+          (selected)="onCourseSelected($event)" />
+      </div>
+
+      @if (!last) {
+      <div class="flex items-center shrink-0 transition-opacity duration-300"
+        [style.width.px]="themeService.arrowWidth()" [style.opacity]="getArrowOpacity(i)">
+        <lp-connection-arrow [completed]="course.completed ?? true" />
+      </div>
+      }
+      }
+    </div>
+
+    <!-- Edge fade overlays — colour matches --lp-edge-fade which changes with mode -->
+    <div class="absolute inset-y-0 left-0 w-8 pointer-events-none"
+      style="background: linear-gradient(to right, var(--lp-edge-fade), transparent)"></div>
+    <div class="absolute inset-y-0 right-0 w-8 pointer-events-none"
+      style="background: linear-gradient(to left, var(--lp-edge-fade), transparent)"></div>
+  </div>
+
+  <!-- Expandable detail panel — visibility is a reactive signal -->
+  @if (themeService.showDetailPanel()) {
+  <div class="mt-6 transition-all duration-300 overflow-hidden" [style.max-height]="selectedCourse() ? '600px' : '0px'"
+    [style.opacity]="selectedCourse() ? '1' : '0'">
+    <lp-course-detail-panel [course]="selectedCourse()" [concepts]="learningPath.concepts" (closed)="closePanel()" />
+  </div>
+  }
+
+</div>

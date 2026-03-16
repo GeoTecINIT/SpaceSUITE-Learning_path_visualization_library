@@ -1,0 +1,26 @@
+<div class="flex-1 min-w-0">
+  <div class="flex items-center gap-3 mb-2 flex-wrap">
+    <lp-difficulty-badge [difficulty]="course.difficulty" />
+    @if (course.duration) {
+    <span class="text-xs flex items-center gap-1.5" style="color: var(--lp-text-secondary)">
+      <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+        <circle cx="6" cy="6" r="5" stroke="currentColor" stroke-width="1.25" />
+        <path d="M6 3.5V6L7.5 7.5" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" />
+      </svg>
+      {{ course.duration }}
+    </span>
+    }
+    <span class="text-xs flex items-center gap-1.5" style="color: var(--lp-text-secondary)">
+      <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+        <path d="M1 3h10M1 6h7M1 9h5" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" />
+      </svg>
+      {{ course.learning_objectives?.length ?? 0 }} learning objectives
+    </span>
+  </div>
+  <h2 class="text-lg font-bold mb-1"
+    [style.color]="themeService.colorMode() == 'dark' ? 'var(--lp-text-primary)': 'var(--lp-accent-text)'">{{
+    course.label }}</h2>
+  @if (course.description) {
+  <p class="text-sm leading-relaxed" style="color: var(--lp-text-secondary)">{{ course.description }}</p>
+  }
+</div>

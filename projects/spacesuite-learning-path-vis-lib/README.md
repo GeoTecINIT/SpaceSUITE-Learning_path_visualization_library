@@ -61,3 +61,37 @@ Angular CLI does not come with an end-to-end testing framework by default. You c
 ## Additional Resources
 
 For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+
+
+## Setting theme
+Option 1: `provideLearningPath()`  - Set theme and config once at app bootstrap. All instances share the same resolved config.
+
+```js
+// app.config.ts
+provideLearningPath({
+  theme: { accentColor: '#a78bfa', accentColor2: '#f472b6' },
+  showThemeSelector: true,
+  cardWidth: 300,
+})
+```
+
+Option 2: `[themeColor]` input  - Pass a hex string directly to the component. Useful when each instance needs a different color.
+
+```html
+// my-page.component.html
+<lp-learning-path
+  [learningPath]="path"
+  [themeColor]="'#6366f1'"
+/>
+```
+
+Option 3: `ThemeService` injection  - Inject ThemeService and call setCustom() / setPreset() at runtime — e.g. from a color picker or user preferences.
+
+```js
+// my-component.ts
+readonly themeService = inject(ThemeService);
+
+applyBrandColor(hex: string) {
+  this.themeService.setCustom({ accentColor: hex });
+}
+```

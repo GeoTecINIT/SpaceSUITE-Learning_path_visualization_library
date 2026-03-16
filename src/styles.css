@@ -2,3 +2,67 @@
 @import "flowbite/src/themes/default";
 @plugin "flowbite/plugin";
 @source "../node_modules/flowbite";
+
+
+:root {
+  --lp-accent:        #38bdf8;
+  --lp-accent-muted:  rgba(56,189,248,0.12);
+  --lp-accent-border: rgba(56,189,248,0.30);
+  --lp-accent-text:   #38bdf8;
+  --lp-accent-glow:   rgba(56,189,248,0.18);
+  --lp-accent2:       #a78bfa;
+  --lp-accent2-muted: rgba(167,139,250,0.10);
+  --lp-stat-icon:     #38bdf8;
+  --lp-bg-glow1:      rgba(56,189,248,0.04);
+  --lp-bg-glow2:      rgba(167,139,250,0.04);
+
+  /* Surface / text / border — dark mode defaults; overwritten by applyModeVars() */
+  --lp-bg:              #0f172a;
+  --lp-surface:         #1e293b;
+  --lp-surface-raised:  #263448;
+  --lp-surface-overlay: rgba(30,41,59,0.80);
+  --lp-border:          rgba(71,85,105,0.60);
+  --lp-border-subtle:   rgba(51,65,85,0.50);
+  --lp-text-primary:    #f1f5f9;
+  --lp-text-secondary:  #94a3b8;
+  --lp-text-muted:      #64748b;
+  --lp-text-heading:    #ffffff;
+  --lp-shadow:          rgba(0,0,0,0.30);
+  --lp-edge-fade:       #0f172a;
+  --lp-step-bg:         rgba(51,65,85,0.60);
+  --lp-step-border:     #475569;
+  --lp-step-color:      #94a3b8;
+}
+
+@layer base {
+  * {
+    box-sizing: border-box;
+    /* Smooth colour transitions on all elements when mode toggles */
+    transition-property: color, background-color, border-color, box-shadow;
+    transition-duration: 300ms;
+  }
+  body {
+    background: var(--lp-bg);
+    color: var(--lp-text-primary);
+    font-family: 'DM Sans', system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+}
+
+@layer utilities {
+  .line-clamp-3 {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+  }
+}
+
+@keyframes lp-fade-in {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.animate-lp-fade-in {
+  animation: lp-fade-in 0.3s ease-out;
+}

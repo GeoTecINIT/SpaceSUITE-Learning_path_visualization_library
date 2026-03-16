@@ -7,10 +7,14 @@
       "projectType": "library",
       "root": "projects/spacesuite-learning-path-vis-lib",
       "sourceRoot": "projects/spacesuite-learning-path-vis-lib/src",
-      "prefix": "lib",
+      "prefix": "lp",
       "architect": {
         "build": {
           "builder": "@angular/build:ng-packagr",
+          "options": {
+            "project": "projects/spacesuite-learning-path-vis-lib/ng-package.json",
+            "tsConfig": "projects/spacesuite-learning-path-vis-lib/tsconfig.lib.json"
+          },
           "configurations": {
             "production": {
               "tsConfig": "projects/spacesuite-learning-path-vis-lib/tsconfig.lib.prod.json"
