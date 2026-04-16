@@ -104,12 +104,12 @@ export function resolveThemeVars(config: ThemeConfig): ThemeVars {
  * Writes a ThemeVars map as CSS custom properties on a target element
  * (defaults to :root / document.documentElement).
  */
-export function applyThemeVars(
-  vars: ThemeVars,
-  target: HTMLElement = document.documentElement,
-): void {
+export function applyThemeVars(vars: ThemeVars, target?: HTMLElement): void {
+  const el = target ?? (typeof document !== 'undefined' ? document.documentElement : undefined);
+
+  if (!el) return;
   for (const [key, value] of Object.entries(vars)) {
-    target.style.setProperty(key, value);
+    el.style.setProperty(key, value);
   }
 }
 
@@ -117,7 +117,11 @@ export function applyThemeVars(
  * Removes all --lp-* custom properties from an element.
  * Useful for scoped theming on a container element.
  */
-export function clearThemeVars(target: HTMLElement = document.documentElement): void {
+export function clearThemeVars(target?: HTMLElement): void {
+  const el = target ?? (typeof document !== 'undefined' ? document.documentElement : undefined);
+
+  if (!el) return;
+
   const keys: (keyof ThemeVars)[] = [
     '--lp-accent',
     '--lp-accent-muted',
@@ -130,7 +134,8 @@ export function clearThemeVars(target: HTMLElement = document.documentElement): 
     '--lp-bg-glow1',
     '--lp-bg-glow2',
   ];
-  keys.forEach((k) => target.style.removeProperty(k));
+
+  keys.forEach((k) => el.style.removeProperty(k));
 }
 
 // ─── Color mode palettes ──────────────────────────────────────────────────────
@@ -186,13 +191,13 @@ export const MODE_VARS: Record<ColorMode, Record<string, string>> = {
  * `data-lp-mode="dark|light"` as a CSS hook for any additional
  * host-app overrides.
  */
-export function applyModeVars(
-  mode: ColorMode,
-  target: HTMLElement = document.documentElement,
-): void {
+export function applyModeVars(mode: ColorMode, target?: HTMLElement): void {
+  const el = target ?? (typeof document !== 'undefined' ? document.documentElement : undefined);
+
+  if (!el) return;
   const vars = MODE_VARS[mode];
   for (const [key, value] of Object.entries(vars)) {
-    target.style.setProperty(key, value);
+    el.style.setProperty(key, value);
   }
-  target.setAttribute('data-lp-mode', mode);
+  el.setAttribute('data-lp-mode', mode);
 }

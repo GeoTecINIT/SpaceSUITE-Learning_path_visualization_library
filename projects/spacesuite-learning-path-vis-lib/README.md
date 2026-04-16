@@ -9,6 +9,11 @@ npm i spacesuite-learning-path-vis-lib
 ```
 
 ### Usage
+In the src/styles.css add the following:
+```css
+@source "../node_modules/spacesuite-learning-path-vis-lib/";
+```
+
 ```js
 // my-page.component.ts
 
@@ -118,11 +123,28 @@ Option 1: `provideLearningPath()`  - Set theme and config once at app bootstrap.
 
 ```js
 // app.config.ts
-provideLearningPath({
-  theme: { accentColor: '#a78bfa', accentColor2: '#f472b6' },
-  showThemeSelector: true,
-  cardWidth: 300,
-})
+
+import { provideLearningPath } from 'spacesuite-learning-path-vis-lib';
+
+providers: [
+  ....,
+  provideLearningPath({
+    theme: { accentColor: '#a78bfa', accentColor2: '#f472b6' },
+    cardWidth: 300,
+    arrowWidth: 44,
+    showThemeSelector: false,
+    showStatsPanel: true,
+    showDescriptionPanel: true,
+    showDetailPanel: true,
+    showDuration: true,
+    showObjectives: true,
+    showBloomLevels: true,
+    autoScrollToInProgress: true,
+    showEyeBallPanel: false,
+    trackLabel: 'Course Track',
+    eyebrowLabel: 'Learning Path',
+  }),
+],
 ```
 
 Option 2: `[themeColor]` input  - Pass a hex string directly to the component. Useful when each instance needs a different color.

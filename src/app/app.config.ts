@@ -22,6 +22,7 @@ export const appConfig: ApplicationConfig = {
       showObjectives: true,
       showBloomLevels: true,
       autoScrollToInProgress: true,
+      showEyeBallPanel: true,
       trackLabel: 'Course Track',
       eyebrowLabel: 'Learning Path',
     }),
