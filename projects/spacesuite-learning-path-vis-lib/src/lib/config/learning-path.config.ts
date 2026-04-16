@@ -73,6 +73,12 @@ export interface LearningPathConfig {
   showThemeSelector?: boolean;
 
   /**
+   * Show the learning path eyeball.
+   * @default true
+   */
+  showEyeBallPanel?: boolean;
+
+  /**
    * Show the learning path stats bar (courses count, completed, objectives, overall %).
    * @default true
    */
@@ -139,6 +145,7 @@ export const DEFAULT_CONFIG: ResolvedConfig = {
   cardWidth: 280,
   arrowWidth: 40,
   showThemeSelector: true,
+  showEyeBallPanel: true,
   showStatsPanel: true,
   showDescriptionPanel: true,
   showDetailPanel: true,

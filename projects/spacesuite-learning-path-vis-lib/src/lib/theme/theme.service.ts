@@ -126,6 +126,12 @@ export class ThemeService {
   readonly showDetailPanel = signal<boolean>(this.configService.config.showDetailPanel);
 
   /**
+   * Controls whether the learning path eyeball is shown.
+   * Seeded from `LearningPathConfig.showEyeBallPanel`; mutate via `setEyeBallPanel()`.
+   */
+  readonly showEyeBallPanel = signal<boolean>(this.configService.config.showEyeBallPanel);
+
+  /**
    * Controls whether the learning path statistics panel is shown.
    * Seeded from `LearningPathConfig.showStatsPanel`; mutate via `setStatsPanel()`.
    */
@@ -228,6 +234,17 @@ export class ThemeService {
    */
   setDetailPanel(visible: boolean): void {
     this.showDetailPanel.set(visible);
+  }
+
+  /**
+   * Toggle visibility of the eye ball panel at runtime.
+   *
+   * @example
+   * themeService.showEyeBallPanel(false); // hide eye ball panel
+   * themeService.showEyeBallPanel(true);  // show eye ball panel
+   */
+  setEyeBallPanel(visible: boolean): void {
+    this.showEyeBallPanel.set(visible);
   }
 
   /**

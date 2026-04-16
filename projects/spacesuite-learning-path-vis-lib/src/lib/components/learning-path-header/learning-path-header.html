@@ -1,11 +1,13 @@
 <div class="mb-8">
   <!-- Eyebrow -->
+  @if (themeService.showEyeBallPanel()) {
   <div class="flex items-center gap-2 mb-3">
     <div class="w-1.5 h-1.5 rounded-full animate-pulse" style="background: var(--lp-accent)"></div>
     <span class="text-xs font-semibold uppercase tracking-widest" style="color: var(--lp-accent-text)">
       {{ config.eyebrowLabel }}
     </span>
   </div>
+  }
 
   <!-- Title -->
   <h1 class="text-3xl font-black tracking-tight mb-3 leading-tight" style="color: var(--lp-accent-text)">
