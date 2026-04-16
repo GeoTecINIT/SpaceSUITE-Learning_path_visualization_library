@@ -1,6 +1,14 @@
 {
   "name": "spacesuite-learning-path-vis-lib",
-  "version": "0.0.1",
+  "version": "0.0.2",
+  "keywords": [
+    "Learning path"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/GeoTecINIT/SpaceSUITE-Learning_path_visualization_library.git"
+  },
+  "license": "GPL-3.0-only",
   "peerDependencies": {
     "@angular/common": "^20.3.0",
     "@angular/core": "^20.3.0",
